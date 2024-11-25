@@ -12,7 +12,7 @@ defineProps({
 
 <template>
   <div
-    class="relative bg-white border border-slate-100 rounded-3xl p-8 cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+    class="product-card relative bg-white border border-slate-100 rounded-3xl p-8 cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
   >
     <img
       :src="!isFavorite ? '/like-1.svg' : '/like-2.svg'"
@@ -34,3 +34,10 @@ defineProps({
     </div>
   </div>
 </template>
+
+<style scoped>
+.product-card {
+  max-width: 210px;
+  width: 100%;
+}
+</style>
