@@ -1,14 +1,17 @@
-<script setup></script>
+<script setup>
+import Drawer from './components/Drawer.vue'
+import Header from './components/Header.vue'
+import CardList from './components/CardList.vue'
+</script>
 
 <template>
-  <div class="w-4/5 m-auto h-screen rounded-xl shadow-xl mt-14 bg-slate-400">
-    <header>
-      <div>
-        <img src="/logo.png" alt="Logo" />
-      </div>
-    </header>
-
-    <h1>111111111</h1>
+  <!-- <Drawer /> -->
+  <div class="w-4/5 m-auto rounded-xl shadow-xl mt-14 bg-gray-400">
+    <Header />
+    <div class="p-10">
+      <h2 class="text-3xl font-bold m-8">Все кроссовки</h2>
+      <CardList />
+    </div>
   </div>
 </template>
 
