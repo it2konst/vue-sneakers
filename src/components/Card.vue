@@ -1,12 +1,13 @@
 <script setup>
 defineProps({
+  id: Number,
   title: String,
   imageUrl: String,
   price: Number,
-  isAdded: Boolean,
   isFavorite: Boolean,
-  onClickAdd: Function,
+  isAdded: Boolean,
   onClickFavorite: Function,
+  onClickAdd: Function,
 })
 </script>
 

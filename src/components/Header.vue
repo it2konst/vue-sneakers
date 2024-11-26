@@ -1,5 +1,5 @@
 <template>
-  <header class="flex justify-between border-b border-slate-200 px-10 py-8">
+  <header class="flex flex-wrap gap-4 justify-between border-b border-slate-200 px-10 py-8">
     <div class="flex items-center gap-3">
       <img src="/logo.png" alt="Logo" class="w-10" />
       <div>
@@ -7,7 +7,7 @@
         <p class="text-slate-400">Магазин лучших кроссовок</p>
       </div>
     </div>
-    <ul class="flex items-center gap-10">
+    <ul class="flex flex-wrap items-center gap-4 sm:gap-10">
       <li class="flex items-center cursor-pointer gap-3 text-gray-500 hover:text-black">
         <img src="/cart.svg" alt="Cart" />
         <b>1205 руб.</b>
