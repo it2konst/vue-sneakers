@@ -7,6 +7,8 @@ import Header from './components/Header.vue'
 import CardList from './components/CardList.vue'
 
 const items = ref([])
+const cart = ref([])
+
 const drawerOpen = ref(false)
 
 const toggleDrawer = () => {
@@ -17,6 +19,18 @@ const filters = reactive({
   sortBy: 'title',
   searchQuery: '',
 })
+
+const addToCart = (item) => {
+  if (!item.isAdded) {
+    item.isAdded = true
+    cart.value.push(item)
+    console.log(item)
+  } else {
+    item.isAdded = false
+    cart.value.splice(cart.value.indexOf(item), 1)
+    // cart.value = cart.value.filter((i) => i.id !== item.id)
+  }
+}
 
 const onChangeSelect = (event) => {
   filters.sortBy = event.target.value
@@ -92,12 +106,15 @@ onMounted(async () => {
 
 watch(filters, fetchItems)
 
-provide('cartActions', toggleDrawer)
+provide('cart', { cart, toggleDrawer })
 </script>
 
 <template>
+  <!-- <Transition name="drawer"> -->
   <Drawer v-if="drawerOpen" @toggleDrawer="toggleDrawer" />
-  <div class="w-4/5 m-auto rounded-xl shadow-xl mt-14 bg-slate-50">
+  <!-- </Transition> -->
+
+  <div class="container m-auto rounded-xl shadow-xl mt-14 bg-slate-50">
     <Header @toggleDrawer="toggleDrawer" />
 
     <div class="p-4 md:p-10">
@@ -122,7 +139,7 @@ provide('cartActions', toggleDrawer)
           </div>
         </div>
       </div>
-      <CardList :items="items" @add-to-favorite="addToFavorite" />
+      <CardList :items="items" @addToFavorite="addToFavorite" @addToCart="addToCart" />
     </div>
   </div>
 </template>
@@ -140,4 +157,21 @@ md:	768px
 lg:	1024px
 xl:	1280px
 */
+
+/* .drawer-enter-active,
+.drawer-leave-active {
+  transition: all 0.5s ease;
+}
+
+.drawer-enter-from,
+.drawer-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.drawer-enter-to,
+.drawer-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+} */
 </style>

@@ -1,8 +1,18 @@
 <script setup>
+import { onMounted, onBeforeUnmount } from 'vue'
+
 import DrawerHead from './DrawerHead.vue'
 import CartItemList from './CartItemList.vue'
 
 const emit = defineEmits(['toggleDrawer'])
+
+onMounted(() => {
+  document.documentElement.style.overflowY = 'hidden'
+})
+
+onBeforeUnmount(() => {
+  document.documentElement.style.overflowY = ''
+})
 </script>
 
 <template>

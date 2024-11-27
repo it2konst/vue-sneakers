@@ -31,14 +31,14 @@ defineProps({
         <b>{{ price }} руб.</b>
       </div>
 
-      <img :src="!isAdded ? '/plus.svg' : '/checked.svg'" alt="Plus" />
+      <img @click="onClickAdd" :src="!isAdded ? '/plus.svg' : '/checked.svg'" alt="Plus" />
     </div>
   </div>
 </template>
 
 <style scoped>
 .product-card {
-  max-width: 210px;
+  max-width: 232px;
   width: 100%;
 }
 
