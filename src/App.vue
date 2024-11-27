@@ -92,10 +92,10 @@ provide('addToFavorite', addToFavorite)
 
 <template>
   <!-- <Drawer /> -->
-  <div class="w-4/5 m-auto rounded-xl shadow-xl mt-14 bg-gray-300">
+  <div class="w-4/5 m-auto rounded-xl shadow-xl mt-14 bg-slate-50">
     <Header />
 
-    <div class="p-10">
+    <div class="p-4 md:p-10">
       <div class="flex flex-wrap justify-center lg:justify-between items-center">
         <h2 class="text-3xl font-bold mb-8 mr-4">Все кроссовки</h2>
 

@@ -22,7 +22,7 @@ defineProps({
       @click="onClickFavorite"
     />
 
-    <img :src="imageUrl" alt="Sneaker" />
+    <img class="card-image" :src="imageUrl" alt="Sneaker" />
     <p class="mt-2">{{ title }}</p>
 
     <div class="flex justify-between mt-5">
@@ -40,5 +40,12 @@ defineProps({
 .product-card {
   max-width: 210px;
   width: 100%;
+}
+
+.card-image {
+  display: block;
+  height: 120px;
+  width: 100%;
+  object-fit: cover;
 }
 </style>
