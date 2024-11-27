@@ -7,6 +7,11 @@ import Header from './components/Header.vue'
 import CardList from './components/CardList.vue'
 
 const items = ref([])
+const drawerOpen = ref(false)
+
+const toggleDrawer = () => {
+  drawerOpen.value = !drawerOpen.value
+}
 
 const filters = reactive({
   sortBy: 'title',
@@ -47,12 +52,12 @@ const addToFavorite = async (item) => {
       const obj = {
         parentId: item.id,
       }
-      const { data } = await axios.post('https://8b444cda99b13d6c.mokky.dev/favorites', obj)
       item.isFavorite = true
+      const { data } = await axios.post('https://8b444cda99b13d6c.mokky.dev/favorites', obj)
       item.favItemId = data.id
     } else {
-      await axios.delete(`https://8b444cda99b13d6c.mokky.dev/favorites/${item.favItemId}`)
       item.isFavorite = false
+      await axios.delete(`https://8b444cda99b13d6c.mokky.dev/favorites/${item.favItemId}`)
       item.favItemId = null
     }
   } catch (err) {
@@ -87,17 +92,17 @@ onMounted(async () => {
 
 watch(filters, fetchItems)
 
-provide('addToFavorite', addToFavorite)
+provide('cartActions', toggleDrawer)
 </script>
 
 <template>
-  <!-- <Drawer /> -->
+  <Drawer v-if="drawerOpen" @toggleDrawer="toggleDrawer" />
   <div class="w-4/5 m-auto rounded-xl shadow-xl mt-14 bg-slate-50">
-    <Header />
+    <Header @toggleDrawer="toggleDrawer" />
 
     <div class="p-4 md:p-10">
       <div class="flex flex-wrap justify-center lg:justify-between items-center">
-        <h2 class="text-3xl font-bold mb-8 mr-4">Все кроссовки</h2>
+        <h2 class="text-3xl font-bold text-xl sm:text-2xl mb-4 mr-4 md:mb-8">Все кроссовки</h2>
 
         <div class="flex flex-wrap gap-4 mb-8 justify-center lg:justify-between">
           <select @change="onChangeSelect" class="py-2 px-4 border rounded-md outline-none">

@@ -13,7 +13,7 @@ defineProps({
 
 <template>
   <div
-    class="product-card relative bg-white border border-slate-100 rounded-3xl p-8 cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+    class="product-card relative bg-white border border-slate-100 rounded-3xl p-8 cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 text-sm sm:text-base"
   >
     <img
       :src="!isFavorite ? '/like-1.svg' : '/like-2.svg'"
@@ -47,5 +47,7 @@ defineProps({
   height: 120px;
   width: 100%;
   object-fit: cover;
+  margin: 0 auto;
+  border-radius: 8px;
 }
 </style>
