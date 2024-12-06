@@ -21,15 +21,23 @@ const filters = reactive({
 })
 
 const addToCart = (item) => {
+  item.isAdded = true
+  cart.value.push(item)
+}
+
+const removeFromCart = (item) => {
+  item.isAdded = false
+  // cart.value.splice(cart.value.indexOf(item), 1)
+  cart.value = cart.value.filter((i) => i.id !== item.id)
+}
+
+const onClickAddPlus = (item) => {
   if (!item.isAdded) {
-    item.isAdded = true
-    cart.value.push(item)
-    console.log(item)
+    addToCart(item)
   } else {
-    item.isAdded = false
-    cart.value.splice(cart.value.indexOf(item), 1)
-    // cart.value = cart.value.filter((i) => i.id !== item.id)
+    removeFromCart(item)
   }
+  // console.log(cart.value)
 }
 
 const onChangeSelect = (event) => {
@@ -106,7 +114,7 @@ onMounted(async () => {
 
 watch(filters, fetchItems)
 
-provide('cart', { cart, toggleDrawer })
+provide('cart', { cart, toggleDrawer, addToCart, removeFromCart })
 </script>
 
 <template>
@@ -139,7 +147,7 @@ provide('cart', { cart, toggleDrawer })
           </div>
         </div>
       </div>
-      <CardList :items="items" @addToFavorite="addToFavorite" @addToCart="addToCart" />
+      <CardList :items="items" @addToFavorite="addToFavorite" @addToCart="onClickAddPlus" />
     </div>
   </div>
 </template>

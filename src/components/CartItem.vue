@@ -1,4 +1,6 @@
 <script setup>
+const emit = defineEmits(['onClickRemove'])
+
 defineProps({
   id: Number,
   title: String,
@@ -18,6 +20,7 @@ defineProps({
         <!-- <span class="text-slate-200">Цена:</span> -->
         <b>{{ price }}</b>
         <img
+          @click="emit('onClickRemove')"
           class="cursor-pointer opacity-40 hover:opacity-100 transition-all duration-300"
           src="/close.svg"
           alt=""
