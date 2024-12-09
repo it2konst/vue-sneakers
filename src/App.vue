@@ -5,14 +5,22 @@ import axios from 'axios'
 import Drawer from './components/Drawer.vue'
 import Header from './components/Header.vue'
 import CardList from './components/CardList.vue'
+import { data } from 'autoprefixer'
 
 const items = ref([])
 const cart = ref([])
+const isCreateOrderLoading = ref(false)
 
 const drawerOpen = ref(false)
 
 const totalPrice = computed(() => cart.value.reduce((acc, item) => acc + item.price, 0))
 const vatPrice = computed(() => Math.round((totalPrice.value * 5) / 100))
+
+const cartIsEmpty = computed(() => cart.value.length === 0)
+const CartButtonDisabled = computed(
+    () => (cartIsEmpty.value || isCreateOrderLoading.value ? true : false),
+    // isCreateOrderLoading.value ? 'Загрузка...' : 'Оформить заказ',
+)
 
 const toggleDrawer = () => {
     drawerOpen.value = !drawerOpen.value
@@ -34,13 +42,29 @@ const removeFromCart = (item) => {
     cart.value = cart.value.filter((i) => i.id !== item.id)
 }
 
+const createOrder = async () => {
+    isCreateOrderLoading.value = true
+    try {
+        const { data } = await axios.post('https://8b444cda99b13d6c.mokky.dev/orders', {
+            items: cart.value,
+            totalPrice: totalPrice.value,
+        })
+        cart.value = []
+
+        return data
+    } catch (err) {
+        console.log(err)
+    } finally {
+        isCreateOrderLoading.value = false
+    }
+}
+
 const onClickAddPlus = (item) => {
     if (!item.isAdded) {
         addToCart(item)
     } else {
         removeFromCart(item)
     }
-    // console.log(cart.value)
 }
 
 const onChangeSelect = (event) => {
@@ -111,11 +135,37 @@ const fetchItems = async () => {
 }
 
 onMounted(async () => {
+    const localStorageCart = localStorage.getItem('sneakers-cart')
+    cart.value = localStorageCart ? JSON.parse(localStorageCart) : []
+
     await fetchItems()
     await fetchFavorites()
+
+    items.value = items.value.map((item) => ({
+        ...item,
+        isAdded: cart.value.some((cartItem) => cartItem.id === item.id),
+    }))
 })
 
 watch(filters, fetchItems)
+
+watch(cart, () => {
+    // localStorage.setItem('cart', JSON.stringify(cart.value))
+    // console.log(cart.value)
+
+    items.value = items.value.map((item) => ({
+        ...item,
+        isAdded: false,
+    }))
+})
+
+watch(
+    cart,
+    () => {
+        localStorage.setItem('sneakers-cart', JSON.stringify(cart.value))
+    },
+    { deep: true },
+)
 
 provide('cart', { cart, toggleDrawer, addToCart, removeFromCart })
 </script>
@@ -126,6 +176,8 @@ provide('cart', { cart, toggleDrawer, addToCart, removeFromCart })
         @toggleDrawer="toggleDrawer"
         :totalPrice="totalPrice"
         :vatPrice="vatPrice"
+        @createOrder="createOrder"
+        :CartButtonDisabled="CartButtonDisabled"
     />
 
     <div class="container m-auto rounded-xl shadow-xl mt-14 bg-slate-50">
@@ -169,28 +221,4 @@ input {
     max-width: 210px;
     width: 100%;
 }
-/*
-<div class="flex flex-wrap justify-center gap-4 md:justify-start lg:justify-center">
-sm:	640px
-md:	768px
-lg:	1024px
-xl:	1280px
-*/
-
-/* .drawer-enter-active,
-.drawer-leave-active {
-  transition: all 0.5s ease;
-}
-
-.drawer-enter-from,
-.drawer-leave-to {
-  opacity: 0;
-  transform: translateX(-100%);
-}
-
-.drawer-enter-to,
-.drawer-leave-from {
-  opacity: 1;
-  transform: translateX(0);
-} */
 </style>

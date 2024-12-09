@@ -3,13 +3,15 @@ import { onMounted, onBeforeUnmount } from 'vue'
 
 import DrawerHead from './DrawerHead.vue'
 import CartItemList from './CartItemList.vue'
+import InfoBlock from './InfoBlock.vue'
 
-defineProps({
+const props = defineProps({
     totalPrice: Number,
     vatPrice: Number,
+    CartButtonDisabled: Boolean,
 })
 
-const emit = defineEmits(['toggleDrawer'])
+const emit = defineEmits(['toggleDrawer', 'createOrder'])
 
 onMounted(() => {
     document.documentElement.style.overflowY = 'hidden'
@@ -28,26 +30,38 @@ onBeforeUnmount(() => {
     <div class="fixed top-0 right-0 h-full w-96 bg-gray-300 z-20 p-8">
         <DrawerHead />
 
-        <CartItemList />
+        <div v-if="!totalPrice" class="flex items-center h-full">
+            <info-block
+                title="Корзина пустая"
+                description="Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."
+                image-url="./package-icon.png"
+            />
+        </div>
 
-        <div class="flex flex-col gap-4 mt-7">
-            <div class="flex gap-2">
-                <span>Итого:</span>
-                <div class="flex-1 border-b border-dashed"></div>
-                <b>{{ totalPrice }} ₽</b>
+        <div v-else="totalPrice" class="">
+            <CartItemList />
+
+            <div class="flex flex-col gap-4 mt-7">
+                <div class="flex gap-2">
+                    <span>Итого:</span>
+                    <div class="flex-1 border-b border-dashed"></div>
+                    <b>{{ totalPrice }} ₽</b>
+                </div>
+
+                <div class="flex gap-2">
+                    <span>Налог 5%</span>
+                    <div class="flex-1 border-b border-dashed"></div>
+                    <b>{{ vatPrice }} ₽</b>
+                </div>
+
+                <button
+                    :disabled="CartButtonDisabled"
+                    @click="emit('createOrder')"
+                    class="mt-4 bg-lime-500 w-full rounded-xl p-3 text-white hover:bg-lime-600 active:bg-lime-700 transition-all duration-300 cursor-pointer disabled:bg-slate-400"
+                >
+                    Оформить заказ
+                </button>
             </div>
-
-            <div class="flex gap-2">
-                <span>Налог 5%</span>
-                <div class="flex-1 border-b border-dashed"></div>
-                <b>{{ vatPrice }} ₽</b>
-            </div>
-
-            <button
-                class="mt-4 bg-lime-500 w-full rounded-xl p-3 text-white hover:bg-lime-600 active:bg-lime-700 transition-all duration-300 cursor-pointer disabled:bg-slate-400"
-            >
-                Оформить заказ
-            </button>
         </div>
     </div>
 </template>
